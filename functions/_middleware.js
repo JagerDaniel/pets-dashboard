@@ -1,6 +1,6 @@
 // Site is paused for development. Remove this block to resume normal
 // access (the US-only geo check below it still applies once resumed).
-const PAUSED = true;
+const PAUSED = false;
 
 export async function onRequest({ request, next }) {
   if (PAUSED) {

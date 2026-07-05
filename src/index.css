@@ -4,8 +4,9 @@
   padding: 0;
 }
 
-html, body, #root {
-  height: 100%;
+html, body {
+  height: 100vh;   /* fallback */
+  height: 100dvh;  /* modern browsers */
   width: 100%;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -13,6 +14,91 @@ html, body, #root {
   color: #111;
 }
 
+#root {
+  height: 100%;
+  width: 100%;
+}
+
 .mapboxgl-canvas {
   outline: none;
+}
+
+/* L.divIcon defaults to a white box + border — the sprite already has its
+   own shape, so strip Leaflet's default styling. */
+.pet-marker-icon {
+  background: transparent;
+  border: none;
+}
+
+.splash-max-height {
+  max-height: 85vh;   /* fallback */
+  max-height: 85dvh;  /* modern browsers */
+}
+
+.sheet-max-height {
+  max-height: 70vh;   /* fallback */
+  max-height: 70dvh;  /* modern browsers */
+}
+
+/* Desktop sidebar / mobile bottom sheet — pure CSS breakpoint swap */
+.desktop-sidebar {
+  display: flex;
+}
+
+.mobile-filter-sheet {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .mobile-filter-sheet {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .desktop-sidebar {
+    display: none;
+  }
+}
+
+/* Grab handles — discoverable swipe affordance, mobile only */
+.grab-handle {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .grab-handle {
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(144, 30, 30, 0.35);
+    margin: 0 auto;
+  }
+}
+
+/* Touch target audit — bump hit areas on touch-sized viewports only */
+.close-btn {
+  width: 32px;
+  height: 32px;
+}
+
+.export-btn {
+  padding: 12px;
+}
+
+@media (max-width: 767px) {
+  .close-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .filter-toggle,
+  .color-chip {
+    min-height: 44px;
+  }
+
+  .export-btn {
+    padding: 14px 12px;
+  }
 }

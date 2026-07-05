@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { PetCard } from './PetCard.jsx';
 
-export function CardList({ pets, activePetId, onCardClick }) {
+export function CardList({ pets, activePetId, onCardClick, embedded = false }) {
   const listRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function CardList({ pets, activePetId, onCardClick }) {
   }
 
   return (
-    <div ref={listRef} style={{ overflowY: 'auto', flex: 1 }}>
+    <div ref={listRef} style={embedded ? undefined : { overflowY: 'auto', flex: 1 }}>
       {pets.map(pet => (
         <div key={pet.objectid} data-id={pet.objectid}>
           <PetCard

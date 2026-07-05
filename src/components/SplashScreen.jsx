@@ -16,13 +16,13 @@ export function SplashScreen({ onDismiss }) {
       }}
     >
       <div
+        className="splash-max-height"
         style={{
           background: BEIGE,
           border: `2px solid ${CRIMSON}`,
           borderRadius: 8,
           maxWidth: 520,
           width: '90%',
-          maxHeight: '85vh',
           overflowY: 'auto',
           boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
         }}

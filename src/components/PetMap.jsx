@@ -19,6 +19,17 @@ function MapController({ flyToPet }) {
     map.flyTo(flyToPet.latlng, Math.max(map.getZoom(), 15), { duration: 0.8 });
   }, [flyToPet, map]);
 
+  // Mobile browser chrome show/hide changes 100dvh — Leaflet needs a nudge to notice.
+  useEffect(() => {
+    const handleResize = () => map.invalidateSize();
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, [map]);
+
   return null;
 }
 

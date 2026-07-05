@@ -12,14 +12,19 @@ export function PetMarker({ pet, isActive, onClick }) {
     let cancelled = false;
     // Active markers get a slightly larger size and white ring effect via a second canvas draw
     const size = isActive ? Math.round(pet.sizePx * 1.2) : pet.sizePx;
+    // Pad the tappable hit area up to 44x44 without enlarging the visible
+    // sprite: the image sits flush to the bottom-center of a bigger
+    // invisible box, so the geo anchor point and popup position don't shift.
+    const hitSize = Math.max(44, size);
     getCachedSprite(pet.icon, pet.markerColor, size).then(dataUrl => {
       if (cancelled) return;
-      setIcon(L.icon({
-        iconUrl: dataUrl,
-        iconSize: [size, size],
-        iconAnchor: [size / 2, size],
+      setIcon(L.divIcon({
+        html: `<div style="width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;">`
+          + `<img src="${dataUrl}" width="${size}" height="${size}" style="display:block;" /></div>`,
+        iconSize: [hitSize, hitSize],
+        iconAnchor: [hitSize / 2, hitSize],
         popupAnchor: [0, -size],
-        className: isActive ? 'pet-marker-active' : '',
+        className: `pet-marker-icon${isActive ? ' pet-marker-active' : ''}`,
       }));
     });
     return () => { cancelled = true; };

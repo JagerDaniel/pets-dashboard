@@ -37,6 +37,18 @@ export function applyFilters(pets, filters) {
   });
 }
 
+/**
+ * Count how many filter fields are non-default, for badges like "Filters · 2".
+ */
+export function countActiveFilters(filters) {
+  let count = 0;
+  if (filters.status !== 'all') count += 1;
+  if (filters.animalType !== 'all') count += 1;
+  if (filters.dateFrom !== null || filters.dateTo !== null) count += 1;
+  if (filters.colors.length > 0) count += 1;
+  return count;
+}
+
 export const DEFAULT_FILTERS = {
   status: 'all',       // 'all' | 'lost' | 'found'
   animalType: 'all',   // 'all' | 'dog' | 'cat'

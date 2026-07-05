@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { COLOR_OPTIONS } from '../utils/filters.js';
+import { COLOR_OPTIONS, countActiveFilters } from '../utils/filters.js';
 
 const BORDER_COLOR = 'rgba(144,30,30,0.25)';
 const ACTIVE_COLOR = '#901e1e';
@@ -101,6 +101,7 @@ const s = {
   group: { marginBottom: 14 },
   toggleRow: { display: 'flex', gap: 6, flexWrap: 'wrap' },
   toggle: (active) => ({
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
     padding: '5px 12px', borderRadius: 7,
     border: `2px solid ${active ? ACTIVE_COLOR : BORDER_COLOR}`,
     background: active ? ACTIVE_COLOR : 'transparent',
@@ -146,12 +147,7 @@ export function FilterPanel({ filters, onChange }) {
     onChange({ status: 'all', animalType: 'all', dateFrom: null, dateTo: null, colors: [] });
   }
 
-  const isFiltered =
-    filters.status !== 'all' ||
-    filters.animalType !== 'all' ||
-    filters.dateFrom !== null ||
-    filters.dateTo !== null ||
-    filters.colors.length > 0;
+  const isFiltered = countActiveFilters(filters) > 0;
 
   return (
     <div style={s.panel}>
@@ -161,7 +157,7 @@ export function FilterPanel({ filters, onChange }) {
         <span style={s.label}>Status</span>
         <div style={s.toggleRow}>
           {[['all', 'All'], ['lost', 'Missing'], ['found', 'Found']].map(([val, lbl]) => (
-            <button key={val} style={s.toggle(filters.status === val)}
+            <button key={val} className="filter-toggle" style={s.toggle(filters.status === val)}
               onClick={() => set('status', val)}>{lbl}</button>
           ))}
         </div>
@@ -172,7 +168,7 @@ export function FilterPanel({ filters, onChange }) {
         <span style={s.label}>Animal</span>
         <div style={s.toggleRow}>
           {[['all', 'All'], ['dog', 'Dogs'], ['cat', 'Cats']].map(([val, lbl]) => (
-            <button key={val} style={s.toggle(filters.animalType === val)}
+            <button key={val} className="filter-toggle" style={s.toggle(filters.animalType === val)}
               onClick={() => set('animalType', val)}>{lbl}</button>
           ))}
         </div>
@@ -193,7 +189,7 @@ export function FilterPanel({ filters, onChange }) {
         <span style={s.label}>Color</span>
         <div style={s.colorGrid}>
           {COLOR_OPTIONS.map(({ value, label, hex }) => (
-            <button key={value} style={s.colorBtn(filters.colors.includes(value))}
+            <button key={value} className="color-chip" style={s.colorBtn(filters.colors.includes(value))}
               onClick={() => toggleColor(value)}>
               <div style={s.swatch(hex)} />
               {label}

@@ -6,7 +6,8 @@ import { PhotoGallery } from './components/PhotoGallery.jsx';
 import { DetailPanel } from './components/DetailPanel.jsx';
 import { SplashScreen } from './components/SplashScreen.jsx';
 import { fetchPets } from './utils/featureService.js';
-import { applyFilters, DEFAULT_FILTERS } from './utils/filters.js';
+import { applyFilters, countActiveFilters, DEFAULT_FILTERS } from './utils/filters.js';
+import { MobileFilterSheet } from './components/MobileFilterSheet.jsx';
 
 const BORDER = '2px solid #901e1e';
 const SPLASH_SEEN_KEY = 'ellensburgPets.splashSeen';
@@ -32,13 +33,7 @@ export default function App() {
   }, []);
 
   const filteredPets = applyFilters(allPets, filters);
-
-  const isFiltered =
-    filters.status !== 'all' ||
-    filters.animalType !== 'all' ||
-    filters.dateFrom !== null ||
-    filters.dateTo !== null ||
-    filters.colors.length > 0;
+  const isFiltered = countActiveFilters(filters) > 0;
 
   const openDetail = useCallback(pet => {
     setActivePetId(pet.objectid);
@@ -87,8 +82,8 @@ export default function App() {
       {/* Main content row */}
       <div style={{ display: 'flex', flex: 1, gap: 8, overflow: 'hidden' }}>
 
-        {/* Sidebar */}
-        <div style={{ border: BORDER, borderRadius: 6, overflow: 'hidden', flexShrink: 0, display: 'flex' }}>
+        {/* Sidebar (desktop only — hidden below 768px, see index.css) */}
+        <div className="desktop-sidebar" style={{ border: BORDER, borderRadius: 6, overflow: 'hidden', flexShrink: 0 }}>
           <Sidebar
             filters={filters}
             onFilterChange={setFilters}
@@ -129,6 +124,14 @@ export default function App() {
 
         </div>
       </div>
+
+      <MobileFilterSheet
+        filters={filters}
+        onFilterChange={setFilters}
+        filteredPets={filteredPets}
+        activePetId={activePetId}
+        onCardClick={handleCardClick}
+      />
     </div>
   );
 }

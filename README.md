@@ -51,6 +51,7 @@ The brain of the application. This is where all the major pieces are connected t
 - Keeps track of which pet is currently selected
 - Passes data down to all the other components
 - When you click a card, a photo, or a map marker, the logic for what happens next lives here
+- Reads a `?petId=` query parameter on page load and, once pets have loaded, opens that pet's detail panel and flies the map to it — this is how shared links (from the "Copy Facebook Post + Map Link" button or the poster's QR code) reopen the dashboard at the right pet
 
 If you want to change how the overall page is laid out (e.g. make the sidebar wider, change the order of panels), look at the `return` section of this file.
 
@@ -147,6 +148,13 @@ The collapsible photo strip along the bottom of the map. It:
 
 **To style the photo cards:** Look for the `width: 120, height: 140` values on the photo wrapper div — these control individual photo card dimensions.
 
+#### `DetailPanel.jsx`
+The slide-in panel that opens on the right side of the map when you click a card, photo, or marker. Shows the pet's photo (with thumbnails if there are several), its attributes, and a privacy note about the location being a general area only. It has two action buttons at the bottom:
+- **🖨 Download Missing Pet Poster** — calls `generatePoster.js` to build and download a printable PDF poster
+- **📋 Copy Facebook Post + Map Link** — calls `generateShareText.js` to build a ready-to-paste Facebook caption (status, attributes, a link back to the pet's map location, shelter/contact info, hashtags) and copies it to the clipboard via `navigator.clipboard.writeText()`. The button shows "✅ Copied!" for two seconds as confirmation.
+
+**To edit the shared caption's wording:** see `generateShareText.js` below — the button itself just calls `buildShareText(pet)`.
+
 ---
 
 ### Utilities — `src/utils/`
@@ -227,6 +235,16 @@ This file:
 - Fetches attachments for a list of pets in parallel batches of 6 to avoid overloading the service
 
 You won't need to edit this file.
+
+#### `generatePoster.js`
+Builds a printable PDF missing/found poster for a pet using jsPDF. Lays out the pet's photo, a small static map image of the general area, a QR code (built from `generateShareText.js`'s `buildShareLink()`) that links back to the dashboard, the pet's attributes, and local animal shelter/control contact info. Triggered by the "Download Missing Pet Poster" button in `DetailPanel.jsx`.
+
+#### `generateShareText.js`
+Builds the shareable link and Facebook-style caption used by the "Copy Facebook Post + Map Link" button in `DetailPanel.jsx`, and is also reused by `generatePoster.js` for the poster's QR code. Exports two functions:
+- **`buildShareLink(pet, dashboardUrl?)`** — returns a URL like `<site>/?petId=<id>&lat=<lat>&lng=<lng>&zoom=16` that deep-links back to the pet (read by `App.jsx` on load)
+- **`buildShareText(pet, dashboardUrl?)`** — returns the full caption: a MISSING/FOUND headline, the pet's attributes, a privacy note, the share link, contact info, and hashtags
+
+**To edit the caption wording, contact info, or hashtags:** edit the array of lines returned at the bottom of `buildShareText()`.
 
 ---
 

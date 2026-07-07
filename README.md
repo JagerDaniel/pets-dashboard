@@ -42,7 +42,7 @@ The single HTML page the browser loads. It's mostly empty — just a `<div id="r
 The startup file. It tells React to take over the `#root` div in `index.html` and render the `App` component. You won't need to edit this.
 
 #### `src/index.css`
-Global styles applied to the whole page — things like resetting margins, setting the page to full height, and the dark green background color. **If you want to change the overall background color of the app, this is the place.**
+Global styles applied to the whole page — things like resetting margins, setting the page to full height, and the beige page background color. **If you want to change the overall background color of the app, this is the place.**
 
 #### `src/App.jsx`
 The brain of the application. This is where all the major pieces are connected together. It:
@@ -51,6 +51,7 @@ The brain of the application. This is where all the major pieces are connected t
 - Keeps track of which pet is currently selected
 - Passes data down to all the other components
 - When you click a card, a photo, or a map marker, the logic for what happens next lives here
+- Reads a `?petId=` query parameter on page load and, once pets have loaded, opens that pet's detail panel and flies the map to it — this is how shared links (from the "Copy Facebook Post + Map Link" button or the poster's QR code) reopen the dashboard at the right pet
 
 If you want to change how the overall page is laid out (e.g. make the sidebar wider, change the order of panels), look at the `return` section of this file.
 
@@ -67,14 +68,14 @@ Lists the libraries the app depends on (React, Leaflet, etc.) and the `npm run d
 These files control what you see on screen. Most styling in this project is written as inline JavaScript style objects (e.g. `style={{ color: '#fff', fontSize: 12 }}`). This means styles live right next to the elements they affect, which makes it easy to find and change them.
 
 #### `StatusBar.jsx`
-The dark green bar across the very top of the screen. Shows the app title, a green pulse dot, and summary counts (total reports, missing, found, dogs, cats). When filters are active, the count shows "3 / 12 reports" to indicate filtered vs total.
+The crimson bar across the very top of the screen. Shows the app title and summary count pills (missing, found, dogs, cats). When filters are active, an extra "X of Y" pill appears first to show filtered vs total.
 
-**To style:** Look for the `bar`, `title`, `dot`, and `pill()` objects near the bottom of the file.
+**To style:** Look for the `bar`, `title`, and `pill()` objects near the bottom of the file.
 
 #### `Sidebar.jsx`
-The left-hand panel that contains the filter controls stacked above the card list. It's mostly a layout wrapper — it sets the width (currently `280px`), background color, and border, then renders `FilterPanel` on top and `CardList` below.
+The left-hand panel that contains the filter controls stacked above the card list. It's mostly a layout wrapper — it sets the width (currently `320px`), background color, and border, then renders `FilterPanel` on top and `CardList` below. On narrow screens (below 768px) it's hidden in favor of `MobileFilterSheet.jsx`, a bottom sheet with the same filters and card list.
 
-**To change the sidebar width:** Find `width: 280` in this file and change the number.
+**To change the sidebar width:** Find `width: 320` in this file and change the number.
 
 #### `FilterPanel.jsx`
 The filter controls inside the sidebar. Contains:
@@ -146,6 +147,13 @@ The collapsible photo strip along the bottom of the map. It:
 **To change how many photos show without filters:** Find `MAX_UNFILTERED = 10` and change the number.
 
 **To style the photo cards:** Look for the `width: 120, height: 140` values on the photo wrapper div — these control individual photo card dimensions.
+
+#### `DetailPanel.jsx`
+The slide-in panel that opens on the right side of the map when you click a card, photo, or marker. Shows the pet's photo (with thumbnails if there are several), its attributes, and a privacy note about the location being a general area only. It has two action buttons at the bottom:
+- **🖨 Download Missing Pet Poster** — calls `generatePoster.js` to build and download a printable PDF poster
+- **📋 Copy Facebook Post + Map Link** — calls `generateShareText.js` to build a ready-to-paste Facebook caption (status, attributes, a link back to the pet's map location, shelter/contact info, hashtags) and copies it to the clipboard via `navigator.clipboard.writeText()`. The button shows "✅ Copied!" for two seconds as confirmation.
+
+**To edit the shared caption's wording:** see `generateShareText.js` below — the button itself just calls `buildShareText(pet)`.
 
 ---
 
@@ -228,6 +236,16 @@ This file:
 
 You won't need to edit this file.
 
+#### `generatePoster.js`
+Builds a printable PDF missing/found poster for a pet using jsPDF. Lays out the pet's photo, a small static map image of the general area, a QR code (built from `generateShareText.js`'s `buildShareLink()`) that links back to the dashboard, the pet's attributes, and local animal shelter/control contact info. Triggered by the "Download Missing Pet Poster" button in `DetailPanel.jsx`.
+
+#### `generateShareText.js`
+Builds the shareable link and Facebook-style caption used by the "Copy Facebook Post + Map Link" button in `DetailPanel.jsx`, and is also reused by `generatePoster.js` for the poster's QR code. Exports two functions:
+- **`buildShareLink(pet, dashboardUrl?)`** — returns a URL like `<site>/?petId=<id>&lat=<lat>&lng=<lng>&zoom=16` that deep-links back to the pet (read by `App.jsx` on load)
+- **`buildShareText(pet, dashboardUrl?)`** — returns the full caption: a MISSING/FOUND headline, the pet's attributes, a privacy note, the share link, contact info, and hashtags
+
+**To edit the caption wording, contact info, or hashtags:** edit the array of lines returned at the bottom of `buildShareText()`.
+
 ---
 
 ## Key things to know for style editing
@@ -249,11 +267,11 @@ The color palette used throughout the app:
 
 | Color | Hex | Used for |
 |---|---|---|
-| Dark green | `#1D5C3A` | Accents, active states |
-| Mid green | `#1D9E75` | Found status, highlights |
-| Background | `#1A2E25` | App background |
-| Sidebar | `rgba(26,46,37,0.97)` | Sidebar and status bar |
-| Missing/red | `#D85A30` | Lost status |
-| Text primary | `#F0EDE6` | Main text |
-| Text muted | `rgba(255,255,255,0.4)` | Labels and secondary text |
-| Border | `rgba(255,255,255,0.08)` | Dividers and borders |
+| Crimson | `#901e1e` | Borders, active states, MISSING status |
+| Crimson dark | `#DC143C` | Status bar header background |
+| Green | `#1D9E75` | FOUND status, active card/marker highlights |
+| Beige | `#f5f5dc` | Component backgrounds — sidebar, cards, detail panel |
+| App background | `#e8e8c8` | Page background behind all panels |
+| Text primary | `#111` | Main text |
+| Text muted | `#777` / `#888` | Labels and secondary text |
+| Border | `rgba(144,30,30,0.15)` | Dividers and borders (a soft tint of crimson) |

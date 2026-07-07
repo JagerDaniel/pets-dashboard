@@ -20,6 +20,7 @@ export default function App() {
   const [flyToPet, setFlyToPet]       = useState(null);
   const [detailPet, setDetailPet]     = useState(null);
   const [showSplash, setShowSplash]   = useState(() => !sessionStorage.getItem(SPLASH_SEEN_KEY));
+  const [deepLinkHandled, setDeepLinkHandled] = useState(false);
 
   const dismissSplash = useCallback(() => {
     sessionStorage.setItem(SPLASH_SEEN_KEY, '1');
@@ -31,6 +32,20 @@ export default function App() {
       .then(data => { setAllPets(data); setStatus('ready'); })
       .catch(err  => { console.error(err); setStatus('error'); });
   }, []);
+
+  // Deep link from a shared poster/embed link (?petId=...) — open the pet's
+  // detail panel and fly the map to it once the pet list has loaded.
+  useEffect(() => {
+    if (deepLinkHandled || status !== 'ready') return;
+    setDeepLinkHandled(true);
+    const petId = new URLSearchParams(window.location.search).get('petId');
+    if (!petId) return;
+    const pet = allPets.find(p => String(p.objectid) === petId);
+    if (!pet) return;
+    setActivePetId(pet.objectid);
+    setFlyToPet(pet);
+    setDetailPet(pet);
+  }, [status, allPets, deepLinkHandled]);
 
   const filteredPets = applyFilters(allPets, filters);
   const isFiltered = countActiveFilters(filters) > 0;

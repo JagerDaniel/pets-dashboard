@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useLayoutEffect, useRef } from 'react';
 import { fetchAttachments } from '../utils/attachments.js';
 import { generatePoster } from '../utils/generatePoster.js';
+import { buildShareText } from '../utils/generateShareText.js';
 import { useSwipeSheet } from '../hooks/useSwipeSheet.js';
 
 const BORDER = '2px solid #901e1e';
@@ -10,12 +11,14 @@ export function DetailPanel({ pet, onClose }) {
   const [activePhoto, setActivePhoto] = useState(0);
   const [loading, setLoading]       = useState(false);
   const [exporting, setExporting]   = useState(false);
+  const [copied, setCopied]         = useState(false);
   const [closedOffset, setClosedOffset] = useState(0);
   const panelRef = useRef(null);
   const scrollRef = useRef(null);
   const isOpen = !!pet;
 
   useEffect(() => {
+    setCopied(false);
     if (!pet) { setPhotos([]); setActivePhoto(0); return; }
     setLoading(true);
     setPhotos([]);
@@ -71,6 +74,17 @@ export function DetailPanel({ pet, onClose }) {
       setExporting(false);
     }
   }, [pet, photos, activePhoto, exporting]);
+
+  const handleCopyShareText = useCallback(async () => {
+    if (!pet) return;
+    try {
+      await navigator.clipboard.writeText(buildShareText(pet));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Copy to clipboard failed:', err);
+    }
+  }, [pet]);
 
   if (!pet) return null;
 
@@ -248,6 +262,27 @@ export function DetailPanel({ pet, onClose }) {
               }}
             >
               {exporting ? '⏳ Generating poster…' : '🖨 Download Missing Pet Poster'}
+            </button>
+
+            {/* Copy shareable Facebook post button */}
+            <button
+              onClick={handleCopyShareText}
+              className="copy-share-btn"
+              style={{
+                width: '100%',
+                marginTop: 10,
+                background: copied ? '#1D9E75' : 'transparent',
+                border: `2px solid ${copied ? '#1D9E75' : '#901e1e'}`,
+                borderRadius: 8,
+                color: copied ? '#fff' : '#901e1e',
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: 'pointer',
+                letterSpacing: '0.03em',
+                transition: 'background 0.15s, color 0.15s, border-color 0.15s',
+              }}
+            >
+              {copied ? '✅ Copied! Paste into Facebook' : '📋 Copy Facebook Post + Map Link'}
             </button>
           </div>
         </div>

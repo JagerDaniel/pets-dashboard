@@ -83,7 +83,8 @@ html, body {
   height: 32px;
 }
 
-.export-btn {
+.export-btn,
+.copy-share-btn {
   padding: 12px;
 }
 
@@ -98,7 +99,8 @@ html, body {
     min-height: 44px;
   }
 
-  .export-btn {
+  .export-btn,
+  .copy-share-btn {
     padding: 14px 12px;
   }
 }

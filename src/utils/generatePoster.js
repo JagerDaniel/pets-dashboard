@@ -1,5 +1,6 @@
 import { jsPDF } from 'jspdf';
 import QRCode from 'qrcode';
+import { buildShareLink } from './generateShareText.js';
 
 const W = 215.9;
 const H = 279.4;
@@ -81,8 +82,7 @@ function buildOsmTileUrl(lat, lng, zoom, width, height) {
 }
 
 async function generateQR(pet, dashboardUrl) {
-  const [lat, lng] = pet.latlng;
-  const url = `${dashboardUrl}?petId=${pet.objectid}&lat=${lat.toFixed(5)}&lng=${lng.toFixed(5)}&zoom=16`;
+  const url = buildShareLink(pet, dashboardUrl);
   return QRCode.toDataURL(url, {
     width: 200, margin: 1,
     color: { dark: '#901e1e', light: '#f5f5dc' },

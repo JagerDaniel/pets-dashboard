@@ -62,7 +62,7 @@ src/
     PetMap.jsx             — Leaflet map + MapController for fly-to
     PetMarker.jsx          — single marker with tinted sprite + popup
     PhotoGallery.jsx       — collapsible bottom photo strip
-    DetailPanel.jsx        — slide-in right panel with photo + export button
+    DetailPanel.jsx        — slide-in right panel with photo + export/share buttons
   utils/
     featureService.js      — ArcGIS REST fetch + field mapping
     centroid.js            — polygon ring → [lng, lat] centroid
@@ -71,6 +71,7 @@ src/
     filters.js             — applyFilters(), DEFAULT_FILTERS, COLOR_OPTIONS
     attachments.js         — lazy attachment fetch + cache
     generatePoster.js      — jsPDF v4 poster export with QR + static map
+    generateShareText.js   — buildShareLink()/buildShareText() for the Facebook-post copy button
 public/
   sprites/
     cat.png                — sitting cat silhouette (black on white)
@@ -82,9 +83,15 @@ public/
 - ✅ Phase 2: Filters + card list + photo gallery
 - ✅ Phase 3: Detail panel slide-in
 - ✅ Phase 4: PDF poster export with QR code
+- ✅ Phase 5: Shareable map-embed link + Facebook-post-style copy button
 
 ## Current task
-None — Phase 4 complete. Next up: TBD.
+None — Phase 5 complete. Next up: TBD.
+
+## Shareable link / deep linking
+- DetailPanel has a "Copy Facebook Post + Map Link" button (next to the poster export button) that copies a Facebook-ready caption (status, attributes, general-area note, link, contact info, hashtags) built by `generateShareText.js`.
+- The link is `<origin><pathname>?petId=<id>&lat=<centroid lat>&lng=<centroid lng>&zoom=16` — same URL shape the poster QR code already encoded.
+- `App.jsx` reads `?petId=` on initial load (once pets have fetched) and opens that pet's DetailPanel + flies the map to it, so the copied/QR link actually deep-links.
 
 ## Coding conventions
 - Inline styles as JS objects throughout (no CSS classes except index.css)

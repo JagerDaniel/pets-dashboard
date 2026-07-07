@@ -46,7 +46,7 @@ https://services6.arcgis.com/XZK8P2K8iP98wM2w/arcgis/rest/services/Ellensburg_Lo
 | Crimson dark | #DC143C | Header background |
 | Green | #1D9E75 | FOUND status, active highlights |
 | Beige | #f5f5dc | Component backgrounds, sidebar, cards |
-| App background | #f7e8e8 | Page background (light tint of crimson) |
+| App background | #e8e8c8 | Page background |
 
 ## File structure
 ```

@@ -89,7 +89,7 @@ public/
 None — Phase 5 complete. Next up: TBD.
 
 ## Shareable link / deep linking
-- DetailPanel has a "Copy Facebook Post + Map Link" button (next to the poster export button) that copies a Facebook-ready caption (status, attributes, general-area note, link, contact info, hashtags) built by `generateShareText.js`.
+- DetailPanel has a "Copy Facebook Post + Map Link" button (next to the poster export button) that copies a Facebook-ready caption (status, attributes, general-area note, link, hashtags) built by `generateShareText.js`.
 - The link is `<origin><pathname>?petId=<id>&lat=<centroid lat>&lng=<centroid lng>&zoom=16` — same URL shape the poster QR code already encoded.
 - `App.jsx` reads `?petId=` on initial load (once pets have fetched) and opens that pet's DetailPanel + flies the map to it, so the copied/QR link actually deep-links.
 

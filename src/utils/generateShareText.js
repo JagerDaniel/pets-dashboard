@@ -51,8 +51,6 @@ export function buildShareText(pet, dashboardUrl) {
     '📍 General area shown on the map below (exact address withheld for privacy):',
     link,
     '',
-    'If you have any information, please contact Ellensburg Animal Control at (509) 962-7246 or reach out via the Ellensburg Lost and Found Facebook group.',
-    '',
     `#EllensburgPets #Kittitas${isLost ? 'Missing' : 'Found'}${isDog ? 'Dog' : 'Cat'} #LostAndFound`,
   ].filter(line => line !== undefined).join('\n');
 }

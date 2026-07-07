@@ -151,7 +151,7 @@ The collapsible photo strip along the bottom of the map. It:
 #### `DetailPanel.jsx`
 The slide-in panel that opens on the right side of the map when you click a card, photo, or marker. Shows the pet's photo (with thumbnails if there are several), its attributes, and a privacy note about the location being a general area only. It has two action buttons at the bottom:
 - **🖨 Download Missing Pet Poster** — calls `generatePoster.js` to build and download a printable PDF poster
-- **📋 Copy Facebook Post + Map Link** — calls `generateShareText.js` to build a ready-to-paste Facebook caption (status, attributes, a link back to the pet's map location, shelter/contact info, hashtags) and copies it to the clipboard via `navigator.clipboard.writeText()`. The button shows "✅ Copied!" for two seconds as confirmation.
+- **📋 Copy Facebook Post + Map Link** — calls `generateShareText.js` to build a ready-to-paste Facebook caption (status, attributes, a link back to the pet's map location, hashtags) and copies it to the clipboard via `navigator.clipboard.writeText()`. The button shows "✅ Copied!" for two seconds as confirmation.
 
 **To edit the shared caption's wording:** see `generateShareText.js` below — the button itself just calls `buildShareText(pet)`.
 
@@ -242,9 +242,9 @@ Builds a printable PDF missing/found poster for a pet using jsPDF. Lays out the 
 #### `generateShareText.js`
 Builds the shareable link and Facebook-style caption used by the "Copy Facebook Post + Map Link" button in `DetailPanel.jsx`, and is also reused by `generatePoster.js` for the poster's QR code. Exports two functions:
 - **`buildShareLink(pet, dashboardUrl?)`** — returns a URL like `<site>/?petId=<id>&lat=<lat>&lng=<lng>&zoom=16` that deep-links back to the pet (read by `App.jsx` on load)
-- **`buildShareText(pet, dashboardUrl?)`** — returns the full caption: a MISSING/FOUND headline, the pet's attributes, a privacy note, the share link, contact info, and hashtags
+- **`buildShareText(pet, dashboardUrl?)`** — returns the full caption: a MISSING/FOUND headline, the pet's attributes, a privacy note, the share link, and hashtags
 
-**To edit the caption wording, contact info, or hashtags:** edit the array of lines returned at the bottom of `buildShareText()`.
+**To edit the caption wording or hashtags:** edit the array of lines returned at the bottom of `buildShareText()`.
 
 ---
 

@@ -43,6 +43,7 @@ export function buildShareText(pet, dashboardUrl) {
   const link = buildShareLink(pet, dashboardUrl);
 
   return [
+    ...(pet.isTest ? ['🧪 EXAMPLE / TEST POSTING — not a real report 🧪', ''] : []),
     headline,
     '',
     seenLine,

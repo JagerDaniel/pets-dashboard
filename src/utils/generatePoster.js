@@ -314,9 +314,28 @@ export async function generatePoster(pet, photoUrl, dashboardUrl = window.locati
   doc.setFontSize(8);
   doc.setTextColor(255, 255, 255);
   doc.text(
-    'Ellensburg Pets, Lost and Found',
+    pet.isTest
+      ? 'EXAMPLE / TEST POSTING  ·  Ellensburg Pets, Lost and Found'
+      : 'Ellensburg Pets, Lost and Found',
     W / 2, footerY + 6.5, { align: 'center' }
   );
+
+  // ── Test-posting watermark ────────────────────────────────────
+  // Drawn last so nothing paints over it; if GState opacity isn't
+  // available the footer label above still flags the poster.
+  if (pet.isTest) {
+    try {
+      doc.saveGraphicsState();
+      doc.setGState(new doc.GState({ opacity: 0.15 }));
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(72);
+      doc.setTextColor(...CRIMSON);
+      doc.text('EXAMPLE ONLY', W / 2, H / 2, { align: 'center', angle: 45 });
+      doc.restoreGraphicsState();
+    } catch {
+      // ignore — footer label is the fallback
+    }
+  }
 
   // ── Save ──────────────────────────────────────────────────────
   const filename = `${statusText.toLowerCase()}-${isDog ? 'dog' : 'cat'}-${pet.objectid}.pdf`;

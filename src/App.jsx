@@ -94,6 +94,22 @@ export default function App() {
         <StatusBar status={status} pets={filteredPets} total={allPets.length} />
       </div>
 
+      {/* Test-data notice — shown while any loaded posting is a test/example */}
+      {status === 'ready' && allPets.some(p => p.isTest) && (
+        <div style={{
+          border: '1px dashed #901e1e',
+          borderRadius: 6,
+          background: '#f5f5dc',
+          padding: '6px 14px',
+          fontSize: 13,
+          color: '#555',
+          flexShrink: 0,
+          textAlign: 'center',
+        }}>
+          🧪 Postings marked <strong>EXAMPLE</strong> are test submissions made while setting up this dashboard — not real lost or found pets.
+        </div>
+      )}
+
       {/* Main content row */}
       <div style={{ display: 'flex', flex: 1, gap: 8, overflow: 'hidden' }}>
 

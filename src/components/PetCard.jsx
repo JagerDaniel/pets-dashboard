@@ -35,6 +35,20 @@ export function PetCard({ pet, isActive, onClick }) {
           }}>
             {isLost ? 'MISSING' : 'FOUND'}
           </span>
+          {pet.isTest && (
+            <span style={{
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              padding: '3px 9px',
+              borderRadius: 10,
+              background: 'rgba(90,90,90,0.1)',
+              border: '1px dashed #999',
+              color: '#666',
+            }}>
+              EXAMPLE
+            </span>
+          )}
           <span style={{ fontSize: 13, color: '#444' }}>
             {isDog ? '🐕' : '🐈'} {pet.catDog ?? '—'}
           </span>

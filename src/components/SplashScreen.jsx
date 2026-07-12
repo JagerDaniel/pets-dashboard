@@ -12,7 +12,10 @@ export function SplashScreen({ onDismiss }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1000,
+        // Leaflet's control containers (.leaflet-top/.leaflet-bottom, which hold
+        // the attribution credits) sit at z-index 1000 — matching that lets the
+        // credits bleed through the overlay on mobile. Stay above them.
+        zIndex: 1500,
       }}
     >
       <div

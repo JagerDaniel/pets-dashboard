@@ -1,3 +1,5 @@
+import { isTestPet } from './testFlags.js';
+
 export const COLOR_MAP = {
   black:  '#2C2C2A',
   brown:  '#8B5E3C',
@@ -57,6 +59,7 @@ export function preprocessFeature(arcgisFeature, centroid) {
     cat_color:   p.cat_color,
     cat_hair:    p.cat_hair,
     cat_pattern: p.cat_pattern,
+    isTest:      isTestPet(p.objectid),
     // Map rendering
     latlng:      [centroid[1], centroid[0]], // Leaflet uses [lat, lng]
     icon,

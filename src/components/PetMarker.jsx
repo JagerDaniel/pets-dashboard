@@ -62,6 +62,11 @@ export function PetMarker({ pet, isActive, onClick }) {
           }}>
             {isLost ? 'MISSING' : 'FOUND'} {(pet.catDog ?? '').toUpperCase()}
           </div>
+          {pet.isTest && (
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', color: '#666', marginBottom: 3 }}>
+              🧪 EXAMPLE — test posting, not a real report
+            </div>
+          )}
           <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{occurStr}</div>
           <table style={{ fontSize: 12, borderCollapse: 'collapse', width: '100%' }}>
             <tbody>

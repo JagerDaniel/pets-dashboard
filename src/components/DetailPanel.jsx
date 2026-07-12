@@ -146,8 +146,24 @@ export function DetailPanel({ pet, onClose }) {
           <div className="grab-handle" style={{ marginBottom: 8 }} />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: '0.03em', color: statusColor }}>
-                {isLost ? 'MISSING' : 'FOUND'}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: '0.03em', color: statusColor }}>
+                  {isLost ? 'MISSING' : 'FOUND'}
+                </div>
+                {pet.isTest && (
+                  <span style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    padding: '3px 9px',
+                    borderRadius: 10,
+                    background: 'rgba(90,90,90,0.1)',
+                    border: '1px dashed #999',
+                    color: '#666',
+                  }}>
+                    EXAMPLE
+                  </span>
+                )}
               </div>
               <div style={{ fontSize: 13, color: '#555', marginTop: 2 }}>
                 {isDog ? '🐕' : '🐈'} {pet.catDog}
@@ -233,6 +249,17 @@ export function DetailPanel({ pet, onClose }) {
                 </div>
               ) : null)}
             </div>
+
+            {/* Test-posting note */}
+            {pet.isTest && (
+              <div style={{
+                background: 'rgba(90,90,90,0.08)', border: '1px dashed #999',
+                borderRadius: 6, padding: '10px 12px',
+                fontSize: 12, color: '#555', lineHeight: 1.5, marginBottom: 12,
+              }}>
+                🧪 This is a test/example posting created while setting up the dashboard — not a real lost or found pet.
+              </div>
+            )}
 
             {/* Area note */}
             <div style={{

@@ -72,6 +72,7 @@ src/
     attachments.js         — lazy attachment fetch + cache
     generatePoster.js      — jsPDF v4 poster export with QR + static map
     generateShareText.js   — buildShareLink()/buildShareText() for the Facebook-post copy button
+    testFlags.js           — TEST_CUTOFF_OBJECTID + isTestPet() for example postings
 public/
   sprites/
     cat.png                — sitting cat silhouette (black on white)
@@ -87,6 +88,21 @@ public/
 
 ## Current task
 None — Phase 5 complete. Next up: TBD.
+
+## Test/example posting flag
+All postings currently in the feature service are test submissions, so they are
+flagged as examples via `src/utils/testFlags.js`:
+- `isTestPet(objectid)` flags any posting with `objectid <= TEST_CUTOFF_OBJECTID`
+  (currently `Infinity`, i.e. everything). `preprocess.js` attaches it as `pet.isTest`.
+- Flag surfaces: banner under the status bar (App.jsx), EXAMPLE badge on cards
+  (PetCard) and in the detail panel header + notice box (DetailPanel), a note in
+  marker popups (PetMarker), a warning line prepended to the Facebook share text
+  (generateShareText.js), and an "EXAMPLE ONLY" watermark + footer label on the
+  exported poster (generatePoster.js).
+- **When real reports start arriving:** set `TEST_CUTOFF_OBJECTID` to the objectid
+  of the last test submission (check the feature service for the current max) so
+  old test posts stay flagged and new real posts display normally. Set it to `0`
+  to disable flagging entirely.
 
 ## Shareable link / deep linking
 - DetailPanel has a "Copy Facebook Post + Map Link" button (next to the poster export button) that copies a Facebook-ready caption (status, attributes, general-area note, link, hashtags) built by `generateShareText.js`.
